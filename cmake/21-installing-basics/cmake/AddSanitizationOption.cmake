@@ -1,0 +1,17 @@
+option(APP_SANITIZATION "If ON is compiled with sanitization" OFF)
+
+function(SanitizeProject)
+    if (NOT $CACHE{APP_SANITIZATION})
+        message("Skipping sanitization")
+        return()
+    endif ()
+    if (CMAKE_CXX_COMPILER_ID MATCHES GNU)
+        message("Adding sanitization for GNU compiler")
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+        set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+    else ()
+        message(FATAL_ERROR "Not supported compiler")
+    endif ()
+endfunction()
+
+SanitizeProject()
